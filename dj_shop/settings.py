@@ -119,6 +119,10 @@ REST_FRAMEWORK = {
 }
 
 
+# Custom User Model
+AUTH_USER_MODEL = 'shop.User'
+
+
 try:
     from .local_settings import *
 except ImportError:
