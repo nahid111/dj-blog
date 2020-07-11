@@ -52,7 +52,7 @@ class CategoryDetail(APIView):
     def delete(self, request, pk, format=None):
         Category = self.get_object(pk)
         Category.delete()
-        return Response({'success': True}, tatus=status.HTTP_204_NO_CONTENT)
+        return Response({'success': True}, status=status.HTTP_204_NO_CONTENT)
 
 
 
