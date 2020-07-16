@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from django.core.mail import EmailMultiAlternatives
 
 from shop.models import User
@@ -91,5 +91,42 @@ def forgot_password(request):
         print('\x1b[91m' + str(e) + '\x1b[0m')
         return Response(
             {'success': False, 'error': 'Something went wrong'},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+# =====================================================================
+#                         Reset Password
+# =====================================================================
+@api_view(['PUT'])
+def reset_password(request, token):
+    password = request.data['password'] if 'password' in request.data else None
+
+    # Validate
+    if not password:
+        return Response({'success': False, 'error': 'Password is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        # Decoding/validating the token
+        access_token = AccessToken(token)
+        user = User.objects.get(id=access_token['user_id'])
+
+        # Change the password
+        user.set_password(password)
+        user.save()
+
+        return Response({'success': True, 'data': 'Password Changed Successfully !!!'})
+
+    except Exception as e:
+        print('\x1b[1;31m ' + 'Exception: ' + str(e) + ' \x1b[0m')
+
+        if str(e) == "Token is invalid or expired":
+            return Response(
+                {'success': False, 'error': 'Token is invalid or expired !!!'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        return Response(
+            {'success': False, 'error': 'Something went Wrong !!!'},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
