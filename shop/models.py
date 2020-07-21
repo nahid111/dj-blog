@@ -25,7 +25,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
+    email = models.EmailField(verbose_name='email address', max_length=255, unique=True, null=False)
     name = models.CharField(max_length=100, blank=True, default='')
     avatar = models.ImageField(upload_to='photos/%Y/%m/%d/')
     created_at = models.DateTimeField(auto_now_add=True)

@@ -28,7 +28,8 @@ def register(request):
     email = request.data['email'].lower()
     password = request.data['password']
 
-    if User.objects.get(email=email):
+    # check if user with email exists
+    if User.objects.filter(email=email):
         return Response(
             {'success': False, 'error': 'Email already in use'},
             status=status.HTTP_400_BAD_REQUEST
