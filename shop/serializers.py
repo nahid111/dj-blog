@@ -12,7 +12,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        exclude = ['password']
         read_only_fields = ['created_at']
         extra_kwargs = {'password': {'write_only': True}}
 

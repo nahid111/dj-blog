@@ -10,6 +10,7 @@ urlpatterns = [
     path('api/v1/register/', views.register),
     path('api/v1/forgot_password/', views.forgot_password),
     path('api/v1/reset_password/<str:token>/', views.reset_password),
+    path('api/v1/update_user_info/', views.update_user_info),
 
     path('api/v1/categories/', views.CategoryList.as_view()),
     path('api/v1/categories/<int:pk>/', views.CategoryDetail.as_view()),
