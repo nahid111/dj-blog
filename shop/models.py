@@ -25,6 +25,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
+    id = models.AutoField(primary_key=True)
     email = models.EmailField(verbose_name='email address', max_length=255, unique=True, null=False)
     name = models.CharField(max_length=100, blank=True, default='')
     avatar = models.ImageField(upload_to='photos/%Y/%m/%d/')
@@ -55,6 +56,7 @@ class User(AbstractBaseUser):
 
 
 class Category(models.Model):
+    id = models.AutoField(primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100, blank=True, default='')
 
