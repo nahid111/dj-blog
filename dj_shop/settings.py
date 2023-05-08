@@ -1,5 +1,6 @@
 import os
 import environs
+from django.core.management.commands.runserver import Command as runServer
 env = environs.Env()
 env.read_env()
 
@@ -15,6 +16,8 @@ SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+runServer.default_port = env.str("APP_PORT", "8000")
 
 ALLOWED_HOSTS = []
 
@@ -73,8 +76,8 @@ DATABASES = {
         'NAME': env.str("DB_NAME"),
         'USER': env.str("DB_USER"),
         'PASSWORD': env.str("DB_PASSWORD"),
-        'HOST': env.str("HOST", "127.0.0.1"),
-        'PORT': env.str("PORT", "3306"),
+        'HOST': env.str("DB_HOST", "127.0.0.1"),
+        'PORT': env.str("DB_PORT", "3306"),
     }
 }
 
