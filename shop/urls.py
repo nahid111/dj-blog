@@ -12,7 +12,7 @@ urlpatterns = [
     path('api/v1/reset_password/<str:token>/', views.reset_password),
     path('api/v1/update_user_info/', views.update_user_info),
 
-    path('api/v1/categories/', views.CategoryList.as_view()),
-    path('api/v1/categories/<int:pk>/', views.CategoryDetail.as_view()),
+    path('api/v1/categories/', views.CategoryList.as_view(), name='category'),
+    path('api/v1/categories/<int:pk>/', views.CategoryDetail.as_view(), name='category_details'),
 ]
 

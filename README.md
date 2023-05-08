@@ -18,13 +18,10 @@
 ## Setting up DB
 1. create the .env file in the project root directory and set the values: 
 ```markdown
-[client]
-database=
-user=
-password=
-host=127.0.0.1
-port=3306
-default-character-set=utf8
+SECRET_KEY=
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
 ```
 2. Run migrations
 <br/><nbsp/>`python manage.py migrate`
@@ -35,4 +32,4 @@ default-character-set=utf8
 
 
 ## Running Unit Tests
-1. ...
+<nbsp/>`python manage.py test shop`
