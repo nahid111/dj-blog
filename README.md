@@ -30,6 +30,9 @@ DB_PASSWORD=
 1. Run the server: 
 <br/><nbsp/>`python manage.py runserver`
 
-
 ## Running Unit Tests
 <nbsp/>`python manage.py test shop`
+
+## View api documentation
+<nbsp/>`python manage.py runserver`
+<br/><nbsp/>`visit /api/docs`
