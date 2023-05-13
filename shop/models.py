@@ -58,7 +58,7 @@ class User(AbstractBaseUser):
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=100, blank=True, default='')
+    title = models.CharField(max_length=100, blank=False)
 
     def __str__(self):
         return self.title
