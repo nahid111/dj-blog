@@ -27,20 +27,14 @@ class CategoryList(APIView):
 class CategoryDetail(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def get_object(self, pk):
-        try:
-            return Category.objects.get(pk=pk)
-        except Category.DoesNotExist:
-            raise Http404
-
     def get(self, request, pk, format=None):
-        Category = self.get_object(pk)
-        serializer = CategorySerializer(Category)
+        category = self._get_object(pk)
+        serializer = CategorySerializer(category)
         return Response({'success': True, 'data': serializer.data})
 
     def put(self, request, pk, format=None):
-        Category = self.get_object(pk)
-        serializer = CategorySerializer(Category, data=request.data)
+        category = self._get_object(pk)
+        serializer = CategorySerializer(category, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({'success': True, 'data': serializer.data})
@@ -50,15 +44,16 @@ class CategoryDetail(APIView):
         )
 
     def delete(self, request, pk, format=None):
-        Category = self.get_object(pk)
-        Category.delete()
+        category = self._get_object(pk)
+        print("\n\nperforming delete\n\n")
+        category.delete()
         return Response({'success': True}, status=status.HTTP_204_NO_CONTENT)
 
-
-
-
-
-
+    def _get_object(self, pk):
+        try:
+            return Category.objects.get(pk=pk)
+        except Category.DoesNotExist:
+            raise Http404
 
 
 # @api_view(['GET', 'POST'])
