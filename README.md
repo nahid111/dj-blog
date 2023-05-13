@@ -36,3 +36,7 @@ DB_PASSWORD=
 ## View api documentation
 <nbsp/>`python manage.py runserver`
 <br/><nbsp/>`visit /api/docs`
+
+## Note:
+> A custom user model is used to make the email to be used as the username.
+> <br/> ...
