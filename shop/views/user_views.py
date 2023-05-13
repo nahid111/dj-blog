@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from django.core.mail import EmailMultiAlternatives
 
 from shop.models import User
-from shop.serializers import UserSerializer
+from shop.serializers import UserSerializer, RegisterSerializer
 
 
 # =====================================================================
@@ -25,25 +25,30 @@ def current_user(request):
 # =====================================================================
 @api_view(['POST'])
 def register(request):
-    email = request.data['email'].lower()
-    password = request.data['password']
-
-    # check if user with email exists
-    if User.objects.filter(email=email):
-        return Response(
-            {'success': False, 'error': 'Email already in use'},
-            status=status.HTTP_400_BAD_REQUEST
-        )
-
-    try:
-        user = User.objects.create_user(email, password)
-        serializer = UserSerializer(user)
-        return Response({'success': True, 'data': serializer.data})
-    except:
-        return Response(
-            {'success': False, 'error': 'Something went wrong'},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+    # email = request.data['email'].lower()
+    # password = request.data['password']
+    #
+    # # check if user with email exists
+    # if User.objects.filter(email=email):
+    #     return Response(
+    #         {'success': False, 'error': 'Email already in use'},
+    #         status=status.HTTP_400_BAD_REQUEST
+    #     )
+    #
+    # try:
+    #     user = User.objects.create_user(email, password)
+    #     serializer = UserSerializer(user)
+    #     return Response({'success': True, 'data': serializer.data})
+    # except:
+    #     return Response(
+    #         {'success': False, 'error': 'Something went wrong'},
+    #         status=status.HTTP_500_INTERNAL_SERVER_ERROR
+    #     )
+    serializer = RegisterSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({'success': True, 'data': serializer.data}, status=status.HTTP_201_CREATED)
+    return Response({'success': False, 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 # =====================================================================
