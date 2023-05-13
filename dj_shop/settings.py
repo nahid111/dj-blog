@@ -81,6 +81,12 @@ DATABASES = {
     }
 }
 
+# Email
+EMAIL_HOST = env.str("EMAIL_HOST", "sandbox.smtp.mailtrap.io")
+EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = env.str("EMAIL_PORT")
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
