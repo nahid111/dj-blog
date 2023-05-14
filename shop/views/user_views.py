@@ -6,6 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from django.core.mail import EmailMultiAlternatives
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.shortcuts import render
 
 from shop.models import User
 from shop.serializers import UserSerializer, RegisterSerializer
@@ -75,7 +76,7 @@ def forgot_password(request):
         # Generate Token
         refresh = RefreshToken.for_user(user)
         reset_token = str(refresh.access_token)
-        reset_url = f"http://{request.get_host()}/api/v1/reset_password/{reset_token}/"
+        reset_url = f"http://{request.get_host()}/reset_password/{reset_token}/"
 
         # Sending Mail
         subject = "Reset Password - appName"
@@ -109,12 +110,19 @@ def forgot_password(request):
 #                         Reset Password
 # =====================================================================
 @api_view(['GET'])
-def reset_password(request, token):
-    password = request.data['password'] if 'password' in request.data else None
+def reset_password_view(request, token):
+    context = {'token': token}
+    return render(request, 'reset_password.html', context)
+
+
+@api_view(['PUT'])
+def reset_password(request):
+    password = request.data.get('password', None)
+    token = request.data.get('token', None)
 
     # Validate
-    if not password:
-        return Response({'success': False, 'error': 'Password is required'}, status=status.HTTP_400_BAD_REQUEST)
+    if not password or not token:
+        return Response({'success': False, 'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         # Decoding/validating the token
