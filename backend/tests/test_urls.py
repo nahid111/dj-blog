@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-from shop.views import CategoryList, CategoryDetail
+from backend.views import CategoryList, CategoryDetail
 
 
 class TestUrls(SimpleTestCase):

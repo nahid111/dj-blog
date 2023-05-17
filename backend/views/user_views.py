@@ -8,8 +8,8 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.shortcuts import render
 
-from shop.models import User
-from shop.serializers import UserSerializer, RegisterSerializer
+from backend.models import User
+from backend.serializers import UserSerializer, RegisterSerializer
 
 
 # =====================================================================

@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'drf_yasg',
-    'shop'
+    'backend'
 ]
 
 MIDDLEWARE = [
@@ -46,7 +46,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'dj_shop.urls'
+ROOT_URLCONF = 'dj_blog.urls'
 
 TEMPLATES = [
     {
@@ -64,7 +64,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'dj_shop.wsgi.application'
+WSGI_APPLICATION = 'dj_blog.wsgi.application'
 
 
 # Database
@@ -137,7 +137,7 @@ REST_FRAMEWORK = {
 
 
 # Custom User Model
-AUTH_USER_MODEL = 'shop.User'
+AUTH_USER_MODEL = 'backend.User'
 
 
 try:

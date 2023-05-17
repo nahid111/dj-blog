@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from shop.models import Category
+from backend.models import Category
 
 
 class TestCategoryViews(TestCase):

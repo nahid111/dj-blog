@@ -4,8 +4,8 @@ from rest_framework import status
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from shop.models import Category
-from shop.serializers import CategorySerializer
+from backend.models import Category
+from backend.serializers import CategorySerializer
 
 
 class CategoryList(APIView):
