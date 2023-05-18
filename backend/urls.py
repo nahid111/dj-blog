@@ -17,6 +17,7 @@ schema_view = get_schema_view(
 
 router = routers.DefaultRouter()
 router.register('posts', views.PostView)
+router.register('comments', views.CommentView)
 
 
 urlpatterns = [

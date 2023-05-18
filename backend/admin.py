@@ -13,7 +13,11 @@ class PostAdmin(admin.ModelAdmin):
         return format_html('<img width="100" src="{}" />'.format(obj.cover_img_url))
 
 
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'author', 'post', 'body')
+
+
 admin.site.register(Post, PostAdmin)
 admin.site.register(Category)
-admin.site.register(Comment)
+admin.site.register(Comment, CommentAdmin)
 admin.site.register(User)
