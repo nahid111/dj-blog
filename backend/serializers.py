@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
-from .models import User, Category
+from .models import User, Category, Post
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -29,3 +29,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         validated_data['password'] = make_password(validated_data['password'])
         return super(RegisterSerializer, self).create(validated_data)
 
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'author', 'body', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'created_at', 'updated_at']

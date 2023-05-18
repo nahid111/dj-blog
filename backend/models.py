@@ -74,7 +74,7 @@ class Post(models.Model):
     cover_img_url = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     categories = models.ManyToManyField(Category)
 
     def __str__(self):

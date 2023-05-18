@@ -1,5 +1,6 @@
-from django.urls import path
+from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework import routers
 from . import views
 
 from drf_yasg import openapi
@@ -13,6 +14,9 @@ schema_view = get_schema_view(
     ),
     public=True,
 )
+
+router = routers.DefaultRouter()
+router.register('posts', views.PostView)
 
 
 urlpatterns = [
@@ -29,5 +33,7 @@ urlpatterns = [
 
     path('api/v1/categories/', views.CategoryList.as_view(), name='category'),
     path('api/v1/categories/<int:pk>/', views.CategoryDetail.as_view(), name='category_details'),
+
+    path('api/v1/', include(router.urls)),
 ]
 

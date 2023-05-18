@@ -4,7 +4,7 @@ from .models import User, Category, Post
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("title", "author", "category_list", "cover_image", "created_at", "updated_at",)
+    list_display = ("id", "title", "author", "category_list", "cover_image", "created_at", "updated_at",)
 
     def category_list(self, obj):
         return ", ".join([cat.title for cat in obj.categories.all()])
