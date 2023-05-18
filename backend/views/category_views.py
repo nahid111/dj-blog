@@ -10,6 +10,7 @@ from backend.serializers import CategorySerializer
 
 class CategoryList(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = CategorySerializer
 
     def get(self, request, format=None):
         categories = Category.objects.all()
@@ -26,6 +27,7 @@ class CategoryList(APIView):
 
 class CategoryDetail(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = CategorySerializer
 
     def get(self, request, pk, format=None):
         category = self._get_object(pk)

@@ -35,7 +35,7 @@ DB_PASSWORD=
 
 ## View api documentation
 <nbsp/>`python manage.py runserver`
-<br/><nbsp/>`visit /api/docs`
+<br/><nbsp/>`visit /api/v1/swagger-ui/`
 
 ## Note:
 > A custom user model is used to make the email to be used as the username.
