@@ -6,7 +6,7 @@ from .models import User, Category, Post
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'title', 'created_at']
+        fields = ['id', 'title', 'created_at', 'posts']
         read_only_fields = ['created_at']
 
 
@@ -31,7 +31,23 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField()
+    categories = serializers.StringRelatedField(many=True)
+    comments = serializers.StringRelatedField(many=True)
+
+    def to_internal_value(self, data):
+        post_data = {
+            "title": data.get('title'),
+            "body": data.get('body'),
+            "author": User.objects.get(pk=int(data.get('author')))
+        }
+        if data.get('cover_img_url', None):
+            post_data['cover_img_url'] = data.get('cover_img_url')
+        if data.get('categories', None):
+            post_data['categories'] = [int(c) for c in data.get('categories')]
+        return post_data
+
     class Meta:
         model = Post
-        fields = ['id', 'title', 'author', 'body', 'created_at', 'updated_at']
+        fields = ['id', 'title', 'author', 'body', 'cover_img_url', 'created_at', 'updated_at', 'categories', 'comments']
         read_only_fields = ['id', 'created_at', 'updated_at']

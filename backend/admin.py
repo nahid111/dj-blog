@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import User, Category, Post
+from .models import User, Category, Post, Comment
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -15,4 +15,5 @@ class PostAdmin(admin.ModelAdmin):
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Category)
+admin.site.register(Comment)
 admin.site.register(User)
