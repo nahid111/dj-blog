@@ -140,6 +140,18 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = 'backend.User'
 
 
+SWAGGER_SETTINGS = {
+   'SECURITY_DEFINITIONS': {
+      'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': 'Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".',
+      }
+   }
+}
+
+
 try:
     from .local_settings import *
 except ImportError:
