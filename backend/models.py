@@ -28,7 +28,7 @@ class User(AbstractBaseUser):
     id = models.AutoField(primary_key=True)
     email = models.EmailField(verbose_name='email address', max_length=255, unique=True, null=False)
     name = models.CharField(max_length=100, blank=True, default='')
-    avatar = models.ImageField(upload_to='photos/%Y/%m/%d/')
+    avatar = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
