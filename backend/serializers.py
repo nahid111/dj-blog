@@ -7,7 +7,7 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'title', 'created_at', 'posts']
-        read_only_fields = ['created_at']
+        read_only_fields = ['created_at', 'posts']
 
 
 class UserSerializer(serializers.ModelSerializer):
