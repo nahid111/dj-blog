@@ -31,10 +31,10 @@ DB_PASSWORD=
 <br/><nbsp/>`python manage.py runserver`
 
 ## Running Unit Tests
-<nbsp/>`python manage.py test shop`
+<nbsp/>`./manage.py test backend`
 
 ## View api documentation
-<nbsp/>`python manage.py runserver`
+<nbsp/>`./manage.py runserver`
 <br/><nbsp/>`visit /api/v1/swagger-ui/`
 
 ## Note:

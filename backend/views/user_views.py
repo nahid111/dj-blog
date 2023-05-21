@@ -1,20 +1,20 @@
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.mail import EmailMultiAlternatives
-from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.shortcuts import render
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
 from backend.models import User
 from backend.serializers import UserSerializer, RegisterSerializer
 
 
-class UserRegisterView(APIView):
+class UserSignUpView(APIView):
     serializer_class = RegisterSerializer
 
     def post(self, request):
@@ -45,29 +45,28 @@ class UserCurrentView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# =====================================================================
-#                         Forgot Password
-# =====================================================================
 @api_view(['POST'])
-def forgot_password(request):
+def password_forgot(request):
     email = request.data.get('email', None)
 
     # Validate
     try:
         validate_email(email)
-    except ValidationError as e:
-        return Response({'success': False, 'error': e}, status=status.HTTP_400_BAD_REQUEST)
+    except ValidationError as err:
+        return Response(err, status=status.HTTP_400_BAD_REQUEST)
 
     # If user exists
-    user = User.objects.get(email=email)
-    if not user:
-        return Response({'success': False, 'error': 'User not found'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        user = User.objects.get(email=email)
+    except ObjectDoesNotExist:
+        return Response('Record not found!', status=status.HTTP_404_NOT_FOUND)
 
     try:
         # Generate Token
         refresh = RefreshToken.for_user(user)
         reset_token = str(refresh.access_token)
-        reset_url = f"http://{request.get_host()}/reset_password/{reset_token}/"
+        # reset_url = f"http://{request.get_host()}/api/v1/password/reset/{reset_token}/"
+        reset_url = f"http://{request.get_host()}{reverse('password-reset-form', args=[reset_token])}"
 
         # Sending Mail
         subject = "Reset Password - appName"
@@ -87,55 +86,39 @@ def forgot_password(request):
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
-        return Response({'success': True, 'data': 'Password Reset Email Sent'})
+        return Response('Password Reset Email Sent')
 
     except Exception as e:
         print('\x1b[91m' + str(e) + '\x1b[0m')
-        return Response(
-            {'success': False, 'error': 'Something went wrong'},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+        return Response('Something went wrong', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# =====================================================================
-#                         Reset Password
-# =====================================================================
 @api_view(['GET'])
-def reset_password_view(request, token):
+def password_reset_form_view(request, token):
     context = {'token': token}
-    return render(request, 'reset_password.html', context)
+    return render(request, 'password_reset.html', context)
 
 
 @api_view(['PUT'])
-def reset_password(request):
+def password_reset(request):
     password = request.data.get('password', None)
     token = request.data.get('token', None)
 
     # Validate
     if not password or not token:
-        return Response({'success': False, 'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response('Invalid credentials', status=status.HTTP_400_BAD_REQUEST)
 
     try:
         # Decoding/validating the token
         access_token = AccessToken(token)
         user = User.objects.get(id=access_token['user_id'])
-
         # Change the password
         user.set_password(password)
         user.save()
-
-        return Response({'success': True, 'data': 'Password Changed Successfully !!!'})
+        return Response('Password Changed Successfully!')
 
     except Exception as e:
         print('\x1b[1;31m ' + 'Exception: ' + str(e) + ' \x1b[0m')
-
         if str(e) == "Token is invalid or expired":
-            return Response(
-                {'success': False, 'error': 'Token is invalid or expired !!!'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        return Response(
-            {'success': False, 'error': 'Something went Wrong !!!'},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+            return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+        return Response('Something went Wrong!', status=status.HTTP_500_INTERNAL_SERVER_ERROR)

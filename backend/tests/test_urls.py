@@ -1,5 +1,6 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
+
 from backend.views import CategoryList, CategoryDetail
 
 

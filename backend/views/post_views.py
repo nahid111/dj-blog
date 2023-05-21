@@ -1,4 +1,5 @@
 from rest_framework import viewsets, permissions
+
 from backend.models import Post
 from backend.serializers import PostSerializer
 
