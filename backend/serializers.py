@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude = ['avatar']
+        fields = ['email', 'password']
         read_only_fields = ['created_at']
         extra_kwargs = {'password': {'write_only': True}}
 

@@ -1,3 +1,5 @@
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -12,46 +14,35 @@ from backend.models import User
 from backend.serializers import UserSerializer, RegisterSerializer
 
 
-# =====================================================================
-#                       Get Logged in User
-# =====================================================================
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def current_user(request):
-    user = User.objects.get(email=request.user)
-    serializer = UserSerializer(user)
-    return Response({'success': True, 'data': serializer.data})
+class UserRegisterView(APIView):
+    serializer_class = RegisterSerializer
+
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# =====================================================================
-#                              Register
-# =====================================================================
-@api_view(['POST'])
-def register(request):
-    # email = request.data['email'].lower()
-    # password = request.data['password']
-    #
-    # # check if user with email exists
-    # if User.objects.filter(email=email):
-    #     return Response(
-    #         {'success': False, 'error': 'Email already in use'},
-    #         status=status.HTTP_400_BAD_REQUEST
-    #     )
-    #
-    # try:
-    #     user = User.objects.create_user(email, password)
-    #     serializer = UserSerializer(user)
-    #     return Response({'success': True, 'data': serializer.data})
-    # except:
-    #     return Response(
-    #         {'success': False, 'error': 'Something went wrong'},
-    #         status=status.HTTP_500_INTERNAL_SERVER_ERROR
-    #     )
-    serializer = RegisterSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response({'success': True, 'data': serializer.data}, status=status.HTTP_201_CREATED)
-    return Response({'success': False, 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+class UserCurrentView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = UserSerializer
+
+    def get(self, request):
+        user = User.objects.get(email=request.user)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+    def put(self, request):
+        user = User.objects.get(pk=request.user.id)
+        serializer = UserSerializer(user, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # =====================================================================
@@ -148,55 +139,3 @@ def reset_password(request):
             {'success': False, 'error': 'Something went Wrong !!!'},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
-
-
-# =====================================================================
-#                          Update User info
-# =====================================================================
-
-@api_view(['PUT'])
-@permission_classes([IsAuthenticated])
-def update_user_info(request):
-    user = User.objects.get(pk=request.user.id)
-    serializer = UserSerializer(user, data=request.data)
-
-    if serializer.is_valid():
-        # if nothing is passed for Boolean-field, it will be set to false
-        serializer.save(is_active=True)
-        return Response({'success': True, 'data': serializer.data}, status=status.HTTP_201_CREATED)
-    else:
-        return Response(
-            {'success': False, 'error': serializer.errors},
-            status=status.HTTP_400_BAD_REQUEST
-        )
-
-# @api_view(['PUT'])
-# @permission_classes([IsAuthenticated])
-# def update_user_info(request):
-#     name = request.data['name'] if 'name' in request.data and request.data['name'] != '' else None
-#     email = request.data['email'] if 'email' in request.data and request.data['email'] != '' else None
-#     avatar = request.data['avatar'] if 'avatar' in request.data and request.data['avatar'] != '' else None
-#
-#     if not email:
-#         return Response(
-#             {'success': False, 'error': 'email field is required'},
-#             status=status.HTTP_400_BAD_REQUEST
-#         )
-#
-#     try:
-#         user = User.objects.get(pk=request.user.id)
-#         user.name = name
-#         user.email = email
-#         user.avatar = avatar
-#         user.save()
-#
-#         serializer = UserSerializer(user)
-#         return Response({'success': True, 'data': serializer.data}, status=status.HTTP_201_CREATED)
-#
-#     except Exception as e:
-#         print('\x1b[1;31m ' + 'Exception: ' + str(e) + ' \x1b[0m')
-#
-#         return Response(
-#             {'success': False, 'error': str(e)},
-#             status=status.HTTP_500_INTERNAL_SERVER_ERROR
-#         )

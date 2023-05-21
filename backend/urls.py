@@ -16,13 +16,11 @@ urlpatterns = [
 
     path('token/', TokenObtainPairView.as_view()),
     path('token/refresh/', TokenRefreshView.as_view()),
-    path('current_user/', views.current_user),
-    path('register/', views.register),
+    path('register/', views.UserRegisterView.as_view()),
     path('forgot_password/', views.forgot_password),
     path('reset_password/<str:token>/', views.reset_password_view),
     path('reset_password/', views.reset_password),
-    path('update_user_info/', views.update_user_info),
-
+    path('user/current', views.UserCurrentView.as_view()),
     path('categories/', views.CategoryList.as_view(), name='category'),
     path('categories/<int:pk>/', views.CategoryDetail.as_view(), name='category_details'),
 
