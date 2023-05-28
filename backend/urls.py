@@ -22,7 +22,7 @@ urlpatterns = [
     path('password/reset/<str:token>/', views.password_reset_form_view, name='password-reset-form'),
     path('password/reset/', views.password_reset, name='password-reset'),
 
-    path('users/current', views.UserCurrentView.as_view(), name='current-user'),
+    path('users/current/', views.UserCurrentView.as_view(), name='current-user'),
     path('categories/', views.CategoryList.as_view(), name='category'),
     path('categories/<int:pk>/', views.CategoryDetail.as_view(), name='category_details'),
 
