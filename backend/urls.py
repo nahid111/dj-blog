@@ -6,7 +6,6 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
 
 router = routers.DefaultRouter()
-router.register('posts', views.PostView)
 router.register('comments', views.CommentView)
 
 urlpatterns = [
@@ -23,8 +22,12 @@ urlpatterns = [
     path('password/reset/', views.password_reset, name='password-reset'),
 
     path('users/current/', views.UserCurrentView.as_view(), name='current-user'),
+
     path('categories/', views.CategoryList.as_view(), name='category'),
     path('categories/<int:pk>/', views.CategoryDetail.as_view(), name='category_details'),
+
+    path('posts/', views.PostList.as_view(), name='post'),
+    path('posts/<int:pk>/', views.PostDetail.as_view(), name='post_details'),
 
     path('', include(router.urls)),
 ]

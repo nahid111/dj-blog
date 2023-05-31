@@ -32,26 +32,13 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.StringRelatedField()
-    categories = serializers.StringRelatedField(many=True)
-    comments = serializers.StringRelatedField(many=True)
-
-    def to_internal_value(self, data):
-        post_data = {
-            "title": data.get('title'),
-            "body": data.get('body'),
-            "author": User.objects.get(pk=int(data.get('author')))
-        }
-        if data.get('cover_img_url', None):
-            post_data['cover_img_url'] = data.get('cover_img_url')
-        if data.get('categories', None):
-            post_data['categories'] = [int(c) for c in data.get('categories')]
-        return post_data
+    author = serializers.StringRelatedField(required=False)
+    categories = serializers.StringRelatedField(many=True, required=False, read_only=True)
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'author', 'body', 'cover_img_url', 'created_at', 'updated_at', 'categories', 'comments']
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        fields = '__all__'
+        read_only_fields = ['id', 'author', 'categories', 'created_at', 'updated_at']
 
 
 class CommentSerializer(serializers.ModelSerializer):
