@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from backend.models import Post, User
-from backend.serializers import PostSerializer
+from backend.serializers import PostSerializer, CommentSerializer
 
 
 class PostList(APIView):
@@ -63,6 +63,23 @@ class PostDetail(APIView):
     def delete(self, request, pk):
         self._get_object(pk).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def _get_object(self, pk):
+        try:
+            return Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            raise Http404
+
+
+class PostCommentView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = CommentSerializer
+
+    def get(self, request, pk):
+        post = self._get_object(pk)
+        comments = post.comments
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
 
     def _get_object(self, pk):
         try:

@@ -42,7 +42,15 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'post': instance.post.id,
+            'body': instance.body,
+            'author': instance.author.email,
+            'created_at': instance.created_at,
+        }
+
     class Meta:
         model = Comment
         fields = '__all__'
-        read_only_fields = ['created_at']
