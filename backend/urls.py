@@ -29,6 +29,7 @@ urlpatterns = [
     path('posts/', views.PostList.as_view(), name='post'),
     path('posts/<int:pk>/', views.PostDetail.as_view(), name='post_details'),
     path('posts/<int:pk>/comments/', views.PostCommentView.as_view(), name='post_comments'),
+    path('posts/<int:pk>/categories/', views.PostCategoriesView.as_view(), name='post_categories'),
 
     path('', include(router.urls)),
 ]
