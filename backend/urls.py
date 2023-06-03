@@ -5,6 +5,11 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from . import views
 
+
+class MyTokenRefreshView(TokenRefreshView):
+    authentication_classes = []
+
+
 router = routers.DefaultRouter()
 router.register('comments', views.CommentView)
 
@@ -14,7 +19,7 @@ urlpatterns = [
     path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
     path('token/', TokenObtainPairView.as_view(), name='sign-in'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='refresh-token'),
+    path('token/refresh/', MyTokenRefreshView.as_view(), name='refresh-token'),
     path('sign-up/', views.UserSignUpView.as_view(), name='sign-up'),
 
     path('password/forgot/', views.password_forgot, name='password-forgot'),
