@@ -25,12 +25,12 @@ This repo contains the backend api part of the application.
 
 1. create the .env file in the project root directory and set the values:
 
-```markdown
-SECRET_KEY=
-DB_NAME=
-DB_USER=
-DB_PASSWORD=
-```
+   ```markdown
+   SECRET_KEY=
+   DB_NAME=
+   DB_USER=
+   DB_PASSWORD=
+   ```
 
 2. Run migrations
    <br/><nbsp/>`python manage.py migrate`
@@ -46,10 +46,30 @@ DB_PASSWORD=
 
 ## View api documentation
 
-<nbsp/>`./manage.py runserver`
-<br/><nbsp/>`visit /api/v1/swagger-ui/`
+- Run <br/>`./manage.py runserver`
+- Visit <br/>`http://127.0.0.1:8000/api/v1/swagger-ui`
 
 ## Note:
 
 > A custom user model is used to make the email to be used as the username.
 > <br/> ...
+
+# Running with docker & docker-compose, gunicorn, nginx
+
+1. Make sure you have docker and docker-compose installed
+2. Set the following env vars in the .env file
+   ```markdown
+   DB_HOST=db   # should be same as the service name defined in docker-compose.yaml
+   
+   MYSQL_DATABASE=<YOUR_DB_NAME>
+   MYSQL_ROOT_PASSWORD=<YOUR_DB_PASSWORD>
+   
+   DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1
+   ```
+3. Run <br/>
+   `docker compose up` <br/> or <br/>
+   `docker compose up -d` for running in the background
+4. Visit <br/>
+   `http://127.0.0.1:1337/api/v1/swagger-ui`
+5. For clean up, run <br/>
+   `docker compose down -v`

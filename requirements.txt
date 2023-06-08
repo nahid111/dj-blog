@@ -9,3 +9,4 @@ sqlparse>=0.4.4
 mysqlclient>=2.1.1
 pillow>=9.5.0
 drf-spectacular[sidecar]
+gunicorn>=20.1.0
